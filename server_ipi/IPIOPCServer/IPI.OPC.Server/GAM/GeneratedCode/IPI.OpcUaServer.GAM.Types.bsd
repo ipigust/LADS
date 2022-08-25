@@ -1,0 +1,15 @@
+<opc:TypeDictionary
+  xmlns:DI="http://opcfoundation.org/UA/DI/"
+  xmlns:LADS="http://spectaris.de/LADS/"
+  xmlns:opc="http://opcfoundation.org/BinarySchema/"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ua="http://opcfoundation.org/UA/"
+  xmlns:tns="http://in-process.com/UA/GAM/"
+  DefaultByteOrder="LittleEndian"
+  TargetNamespace="http://in-process.com/UA/GAM/"
+>
+  <opc:Import Namespace="http://opcfoundation.org/UA/" Location="Opc.Ua.BinarySchema.bsd"/>
+  <opc:Import Namespace="http://opcfoundation.org/UA/DI/" Location="Opc.Ua.Di.BinarySchema.bsd"/>
+  <opc:Import Namespace="http://spectaris.de/LADS/" Location="Spectaris.LADS.BinarySchema.bsd"/>
+
+</opc:TypeDictionary>

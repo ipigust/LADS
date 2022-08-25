@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ModelDesign
+	xmlns:uax="http://opcfoundation.org/UA/2008/02/Types.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:OpcUa="http://opcfoundation.org/UA/"
+	xmlns:GAM="http://in-process.com/UA/GAM/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:DI="http://opcfoundation.org/UA/DI/"
+	TargetNamespace="http://in-process.com/UA/GAM/"
+	TargetXmlNamespace="http://in-process.com/UA/GAM/"
+	TargetVersion="1.00.0"
+	TargetPublicationDate="2022-04-14T00:00:00Z"
+	xmlns="http://opcfoundation.org/UA/ModelDesign.xsd"
+	xsi:noNamespaceSchemaLocation=".\UA Model Design.xsd"> 
+>
+	<Namespaces>
+	    <Namespace Name="OpcUa" Version="1.04.4" PublicationDate="2020-01-08T00:00:00Z" Prefix="Opc.Ua" InternalPrefix="Opc.Ua.Server" XmlNamespace="http://opcfoundation.org/UA/2008/02/Types.xsd" XmlPrefix="OpcUa">http://opcfoundation.org/UA/</Namespace>
+		<Namespace Name="OpcUaDi" Prefix="Opc.Ua.Di" XmlNamespace="http://opcfoundation.org/UA/DI/Types.xsd" XmlPrefix="DI" FilePath=".\DI\OpcUaDiModel">http://opcfoundation.org/UA/DI/</Namespace>
+		<Namespace Name="GAM" Prefix="IPI.Opc.Server.GAM"  XmlNamespace="http://in-process.com/UA/GAM/Types.xsd" XmlPrefix="GAM">http://in-process.com/UA/GAM/</Namespace>
+	</Namespaces>
+	<ObjectType SymbolicName="GAM:GenericSensorType" BaseType="OpcUa:BaseObjectType">
+		<Description>A generic sensor that read a process value.</Description>
+		<Children>
+			<Variable SymbolicName="GAM:Output" DataType="OpcUa:Double" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogUnitType" />
+		</Children>
+	</ObjectType>
+	<ObjectType SymbolicName="GAM:GenericActuatorType" BaseType="OpcUa:BaseObjectType">
+		<Description>Represents a piece of equipment that causes some action to occur.</Description>
+		<Children>
+			<Variable SymbolicName="GAM:Input" DataType="OpcUa:Double" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogItemType" AccessLevel="Write" />
+		</Children>
+	</ObjectType>
+	<ObjectType SymbolicName="GAM:WatchdogType" BaseType="OpcUa:BaseObjectType">
+		<Description>Watchdog</Description>
+		<Children>
+			<Variable SymbolicName="GAM:Trigger" DataType="OpcUa:Boolean" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogItemType" AccessLevel="Read" />
+			<Variable SymbolicName="GAM:Counter" DataType="OpcUa:Int16" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogItemType" AccessLevel="Read" />
+		</Children>
+		<References>
+			<Reference>
+				<ReferenceType>OpcUa:HasNotifier</ReferenceType>
+				<TargetId>GAM:WatchdogType_Trigger</TargetId>
+			</Reference>
+			<Reference>
+				<ReferenceType>OpcUa:HasNotifier</ReferenceType>
+				<TargetId>GAM:WatchdogType_Counter</TargetId>
+			</Reference>
+		</References>
+	</ObjectType>
+	<ObjectType SymbolicName="GAM:GAMSystemStatusType" BaseType="OpcUa:BaseObjectType">
+		<Description>GAM System Status</Description>
+		<Children>
+			<Property SymbolicName="GAM:AutomaticMode" DataType="OpcUa:Boolean" ValueRank="Scalar" AccessLevel="Read" />
+			<Property SymbolicName="GAM:GAMOK" DataType="OpcUa:Boolean" ValueRank="Scalar" AccessLevel="Read" />
+			<Property SymbolicName="GAM:GAMtemperatureOver35DegreeC" DataType="OpcUa:Boolean" ValueRank="Scalar" AccessLevel="Read" />
+			<Property SymbolicName="GAM:ManualMode" DataType="OpcUa:Boolean" ValueRank="Scalar" AccessLevel="Read" />
+			<Property SymbolicName="GAM:SystemStatusText" DataType="OpcUa:LocalizedText" ValueRank="Scalar" AccessLevel="Read" />
+		</Children>
+	</ObjectType>
+	<ObjectType SymbolicName="GAM:ReadbackTuneParametersType" BaseType="OpcUa:BaseObjectType">
+		<Description>TuneParameters</Description>
+		<Children>
+			<Variable SymbolicName="GAM:IonReference" DataType="OpcUa:Double" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogUnitType" AccessLevel="Read" />
+			<Variable SymbolicName="GAM:Cathode" DataType="OpcUa:Double" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogUnitType" AccessLevel="Read" />
+			<Variable SymbolicName="GAM:Extraction" DataType="OpcUa:Double" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogUnitType" AccessLevel="Read" />
+			<Variable SymbolicName="GAM:Focus" DataType="OpcUa:Double" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogUnitType" AccessLevel="Read" />
+			<Variable SymbolicName="GAM:FilamentCurrent" DataType="OpcUa:Double" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogUnitType" AccessLevel="Read" />
+			<Variable SymbolicName="GAM:EmissionCurrent" DataType="OpcUa:Double" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogUnitType" AccessLevel="Read" />
+			<Variable SymbolicName="GAM:Deflection" DataType="OpcUa:Double" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogUnitType" AccessLevel="Read" />
+			<Variable SymbolicName="GAM:Prefilter" DataType="OpcUa:Double" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogUnitType" AccessLevel="Read" />
+			<Variable SymbolicName="GAM:SEMVoltage" DataType="OpcUa:Double" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogUnitType" AccessLevel="Read" />
+			<Variable SymbolicName="GAM:UVRatio" DataType="OpcUa:Double" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogUnitType" AccessLevel="Read" />
+			<Variable SymbolicName="GAM:FieldAxis" DataType="OpcUa:Double" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogUnitType" AccessLevel="Read" />
+			<Variable SymbolicName="GAM:SelectedFilament" DataType="OpcUa:Int16" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogUnitType" AccessLevel="Read" />
+			<Variable SymbolicName="GAM:Resolution" DataType="OpcUa:Double" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogUnitType" AccessLevel="Read" />
+			<Variable SymbolicName="GAM:Slope" DataType="OpcUa:Double" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogUnitType" AccessLevel="Read" />
+			<Variable SymbolicName="GAM:UOffset" DataType="OpcUa:Int16" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogUnitType" AccessLevel="Read" />
+			<Variable SymbolicName="GAM:DetectorType" DataType="OpcUa:String" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogUnitType" AccessLevel="Read" />
+			<Variable SymbolicName="GAM:DetectorInputPin" DataType="OpcUa:Int16" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogUnitType" AccessLevel="Read" />
+			<Variable SymbolicName="GAM:FIREnabled" DataType="OpcUa:Boolean" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogUnitType" AccessLevel="Read" />
+		</Children>
+	</ObjectType>
+	<ObjectType SymbolicName="GAM:GAMDeviceType" BaseType="DI:DeviceType" SupportsEvents="true">
+		<Description>A gas analysis mass spectrometer.</Description>
+		<Children>
+			<Object SymbolicName="GAM:Watchdog" TypeDefinition="GAM:WatchdogType" SupportsEvents="true"/>
+			<Object SymbolicName="GAM:SystemStatus" TypeDefinition="GAM:GAMSystemStatusType" SupportsEvents="true"/>
+			<Object SymbolicName="GAM:ReadbackTuneParameters" TypeDefinition="GAM:ReadbackTuneParametersType" SupportsEvents="true"/>
+		</Children>
+	</ObjectType>
+	<!--<Object SymbolicName="GAM:MassSpectrometers" TypeDefinition="OpcUa:FolderType" SupportsEvents="true">
+		--><!--<Children>
+			<Object SymbolicName="GAM:GAM1" TypeDefinition="GAM:GAMDeviceType">
+				<BrowseName>GAM #1</BrowseName>
+			</Object>
+		</Children>--><!--
+		<References>
+			--><!--<Reference>
+				<ReferenceType>OpcUa:HasNotifier</ReferenceType>
+				<TargetId>GAM:MassSpectrometers_GAM1</TargetId>
+			</Reference>--><!--
+			<Reference IsInverse="true">
+				<ReferenceType>OpcUa:Organizes</ReferenceType>
+				<TargetId>OpcUa:ObjectsFolder</TargetId>
+			</Reference>
+			<Reference IsInverse="true">
+				<ReferenceType>OpcUa:HasNotifier</ReferenceType>
+				<TargetId>OpcUa:Server</TargetId>
+			</Reference>
+		</References>
+	</Object>-->
+</ModelDesign>

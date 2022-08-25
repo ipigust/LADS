@@ -1,0 +1,162 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ModelDesign
+	xmlns="http://opcfoundation.org/UA/ModelDesign.xsd"
+	xmlns:uax="http://opcfoundation.org/UA/2008/02/Types.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:OpcUa="http://opcfoundation.org/UA/"
+	xmlns:DI="http://opcfoundation.org/UA/DI/"
+	xmlns:LADS="http://spectaris.de/LADS/"
+	TargetNamespace="http://spectaris.de/LADS/"
+	TargetXmlNamespace="http://spectaris.de/LADS/"
+	TargetVersion="1.00.0"
+	TargetPublicationDate="2022-04-14T00:00:00Z"
+	>
+	<Namespaces>
+		<Namespace Name="OpcUa" Version="1.04.4" PublicationDate="2020-01-08T00:00:00Z" Prefix="Opc.Ua" InternalPrefix="Opc.Ua.Server" XmlNamespace="http://opcfoundation.org/UA/2008/02/Types.xsd" XmlPrefix="OpcUa">http://opcfoundation.org/UA/</Namespace>
+		<Namespace Name="OpcUaDi" Prefix="Opc.Ua.Di" XmlNamespace="http://opcfoundation.org/UA/DI/Types.xsd" XmlPrefix="DI" FilePath="..\DI\OpcUaDiModel">http://opcfoundation.org/UA/DI/</Namespace>
+		<Namespace Name="LADS" Prefix="Spectaris.LADS"  XmlNamespace="http://spectaris.de/LADS/Types.xsd" XmlPrefix="LADS">http://spectaris.de/LADS/</Namespace>
+	</Namespaces>
+
+	<ObjectType SymbolicName="LADS:FunctionType" BaseType="DI:TopologyElementType" IsAbstract="true">
+		<Description>Abstract function type.</Description>
+		<Children>
+			<Property SymbolicName="LADS:Enabled" DataType="OpcUa:Boolean" ModellingRule="Optional" />
+			<Object SymbolicName="LADS:Configuration" TypeDefinition="DI:FunctionalGroupType" ModellingRule="Optional" />
+			<Object SymbolicName="LADS:FunctionSet" TypeDefinition="LADS:FunctionSetType" ModellingRule="Optional" />
+			<Object SymbolicName="LADS:ParameterSet" TypeDefinition="OpcUa:BaseObjectType" ModellingRule="Optional" />
+		</Children>
+	</ObjectType>
+	<ObjectType SymbolicName="LADS:BaseSensorFunctionOperationalType" BaseType="DI:FunctionalGroupType">
+		<Description>Object type that stores the raw sensor value provided by the sensing element, and the final sensor value, representing a real-world physical/chemical/biological property.</Description>
+		<Children>
+			<Variable SymbolicName="LADS:RawValue" DataType="OpcUa:Number" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogUnitRangeType" ModellingRule="Optional" />
+			<Variable SymbolicName="LADS:SensorValue" DataType="OpcUa:Number" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogUnitRangeType" ModellingRule="Optional" />
+		</Children>
+	</ObjectType>
+	<ObjectType SymbolicName="LADS:BaseSensorFunctionParameterSetType" BaseType="OpcUa:BaseObjectType">
+		<Description>ObjectType that stores the values that are typically incorporated in a sensor or in a sensor function.</Description>
+		<Children>
+			<Variable SymbolicName="LADS:CalibrationValues" DataType="OpcUa:Double" ValueRank="Array" TypeDefinition="OpcUa:BaseDataVariableType" ModellingRule="Optional" />
+			<Variable SymbolicName="LADS:CompensationValue" DataType="OpcUa:Number" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogUnitRangeType" ModellingRule="Optional" />
+			<Variable SymbolicName="LADS:Damping" DataType="OpcUa:Double" ValueRank="Scalar" TypeDefinition="OpcUa:PropertyType" ModellingRule="Optional" />
+			<!--<Variable SymbolicName="LADS:RawValue" DataType="OpcUa:Number" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogUnitRangeType" ModellingRule="Optional" />
+			<Variable SymbolicName="LADS:SensorValue" DataType="OpcUa:Number" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogUnitRangeType" ModellingRule="Optional" />-->
+		</Children>
+	</ObjectType>
+	<ObjectType SymbolicName="LADS:BaseSensorFunctionType" BaseType="LADS:FunctionType" IsAbstract="true">
+		<Description>Abstract ObjectType used as base for derivation of sensor function.</Description>
+		<Children>
+			<Object SymbolicName="LADS:AlarmMonitor" TypeDefinition="OpcUa:ExclusiveLevelAlarmType" ModellingRule="Optional" />
+			<Object SymbolicName="LADS:Operational" TypeDefinition="DI:FunctionalGroupType" ModellingRule="Mandatory" />
+			<Object SymbolicName="LADS:ParameterSet" TypeDefinition="LADS:BaseSensorFunctionParameterSetType" ModellingRule="Mandatory" />
+			<Object SymbolicName="LADS:Tuning" TypeDefinition="DI:FunctionalGroupType" ModellingRule="Optional" />
+		</Children>
+	</ObjectType>
+	<ObjectType SymbolicName="LADS:AnalogSensorFunctionType" BaseType="LADS:BaseSensorFunctionType" >
+		<Description>Representing an analog measured value.</Description>
+		<Children>
+			<!--<Object SymbolicName="LADS:Operational" TypeDefinition="LADS:AnalogSensorFunctionOperationalType" ModellingRule="Mandatory" />-->
+			<Object SymbolicName="LADS:ParameterSet" TypeDefinition="LADS:BaseSensorFunctionParameterSetType" ModellingRule="Mandatory" />
+		</Children>
+	</ObjectType>
+	<ObjectType SymbolicName="LADS:AnalogSensorFunctionWithCompensationType" BaseType="LADS:BaseSensorFunctionType">
+		<Description>Representing an analog measured value.</Description>
+		<Children>
+			<Object SymbolicName="LADS:ParameterSet" TypeDefinition="LADS:BaseSensorFunctionParameterSetType" ModellingRule="Mandatory" />
+		</Children>
+	</ObjectType>
+	<ObjectType SymbolicName="LADS:FunctionSetType" BaseType="OpcUa:BaseObjectType">
+		<Description>Set of Functions</Description>
+	</ObjectType>
+	<ObjectType SymbolicName="LADS:SupportedPropertySetType" BaseType="OpcUa:BaseObjectType">
+		<Description>Set of properties for a method call</Description>
+		<Children>
+			<Property SymbolicName="LADS:Property" ValueRank="Scalar" ModellingRule="OptionalPlaceholder" />
+		</Children>
+	</ObjectType>
+	<ObjectType SymbolicName="LADS:FunctionalUnitType" BaseType="DI:TopologyElementType">
+		<Description>A Functional Unit.</Description>
+		<Children>
+			<Property SymbolicName="LADS:ComponentName" DataType="OpcUa:LocalizedText" ValueRank="Scalar" ModellingRule="Mandatory" />
+			<Object SymbolicName="LADS:FunctionSet" TypeDefinition="LADS:FunctionSetType" ModellingRule="Mandatory" />
+			<Object SymbolicName="LADS:Identification" TypeDefinition="DI:FunctionalGroupType" ModellingRule="Mandatory" />
+			<Object SymbolicName="LADS:Lock" TypeDefinition="DI:LockingServicesType" ModellingRule="Mandatory" />
+			<Object SymbolicName="LADS:MethodSet" TypeDefinition="OpcUa:BaseObjectType" ModellingRule="Optional" />
+			<Object SymbolicName="LADS:Operational" TypeDefinition="DI:FunctionalGroupType" ModellingRule="Mandatory" />
+			<Object SymbolicName="LADS:ProgramManager" TypeDefinition="LADS:ProgramManagerType" ModellingRule="Optional" />
+			<Object SymbolicName="LADS:SupportedPropertySet" TypeDefinition="LADS:SupportedPropertySetType" ModellingRule="Optional" />
+		</Children>
+	</ObjectType>
+	<ObjectType SymbolicName="LADS:FunctionalUnitSetType" BaseType="OpcUa:BaseObjectType">
+		<Description>Set of Functional Units.</Description>
+	</ObjectType>
+	<!--<ObjectType SymbolicName="LADS:LADSBaseStateMachineType" BaseType="OpcUa:FiniteStateMachineType">-->
+	<ObjectType SymbolicName="LADS:LADSBaseStateMachineType" BaseType="OpcUa:ProgramStateMachineType">
+			<Description>Top level StateMachine for the LADS ActiveProgram.</Description>
+		<Children>
+		</Children>
+	</ObjectType>
+	<ObjectType SymbolicName="LADS:ProgramTemplateType" BaseType="OpcUa:BaseObjectType">
+		<Description>Represents a program template which is stored within the TemplateSet of an FunctionalUnit and can be selected to be executed as ActiveProgram on this FunctionalUnit.</Description>
+		<Children>
+			<Property SymbolicName="LADS:Name" DataType="OpcUa:String" ModellingRule="Mandatory" />
+			<Property SymbolicName="LADS:TemplateID" DataType="OpcUa:String" ModellingRule="Mandatory" />
+			<Property SymbolicName="LADS:Author" DataType="OpcUa:LocalizedText" ModellingRule="Mandatory" />
+			<Property SymbolicName="LADS:Created" DataType="OpcUa:DateTime" ModellingRule="Mandatory" />
+			<Property SymbolicName="LADS:Modified" DataType="OpcUa:DateTime" ModellingRule="Mandatory" />
+			<Property SymbolicName="LADS:Version" DataType="OpcUa:String" ModellingRule="Mandatory" />
+			<Property SymbolicName="LADS:Status" DataType="OpcUa:String" ModellingRule="Mandatory" />
+		</Children>
+	</ObjectType>
+	<ObjectType SymbolicName="LADS:ProgramTemplateSetType" BaseType="OpcUa:BaseObjectType">
+		<Description>Represents a set of program templates.</Description>
+		<Children>
+			<Variable SymbolicName="LADS:NodeVersion" DataType="OpcUa:UInt32" ValueRank="Scalar" TypeDefinition="OpcUa:PropertyType" ModellingRule="Mandatory" />
+		</Children>
+	</ObjectType>
+	<ObjectType SymbolicName="LADS:ResultSetType" BaseType="OpcUa:BaseObjectType">
+		<Description>Represents a set of program results.</Description>
+		<Children>
+			<Variable SymbolicName="LADS:NodeVersion" DataType="OpcUa:UInt32" ValueRank="Scalar" TypeDefinition="OpcUa:PropertyType" ModellingRule="Mandatory" />
+		</Children>
+	</ObjectType>
+	<ObjectType SymbolicName="LADS:ProgramManagerType" BaseType="DI:TopologyElementType">
+		<Description>Manages the execution jobs and their results.</Description>
+		<Children>
+			<Object SymbolicName="LADS:ActiveProgram" TypeDefinition="LADS:LADSBaseStateMachineType" ModellingRule="Mandatory" />
+			<Object SymbolicName="LADS:Operational" TypeDefinition="DI:FunctionalGroupType" ModellingRule="Mandatory" />
+			<Object SymbolicName="LADS:ProgramTemplateSet" TypeDefinition="LADS:ProgramTemplateSetType" ModellingRule="Mandatory" />
+			<Object SymbolicName="LADS:ResultSet" TypeDefinition="LADS:ResultSetType" ModellingRule="Mandatory" />
+		</Children>
+	</ObjectType>
+	<ObjectType SymbolicName="LADS:LADSComponentType" BaseType="DI:ComponentType">
+		<Description>A tangible sub-component of a device.</Description>
+		<Children>
+			<Object SymbolicName="LADS:ComponentSet" TypeDefinition="LADS:ComponentSetType" ModellingRule="Optional" />
+			<!--<Object SymbolicName="LADS:Identification" TypeDefinition="MA:MachineryComponentIdentificationType" ModellingRule="Optional" />-->
+			<!--<Object SymbolicName="LADS:TaskSet" TypeDefinition="OpcUa:TaskSetType" ModellingRule="Optional" />-->
+			<Object SymbolicName="LADS:Maintenance" TypeDefinition="DI:FunctionalGroupType" ModellingRule="Optional" />
+			<Variable SymbolicName="LADS:DeviceHealth" DataType="DI:DeviceHealthEnumeration" ValueRank="Scalar" ModellingRule="Optional" />
+		</Children>
+		<References>
+			<Reference IsInverse="false">
+				<ReferenceType>OpcUa:HasInterface</ReferenceType>
+				<TargetId>DI:IDeviceHealthType</TargetId>
+			</Reference>
+		</References>
+	</ObjectType>
+	<ObjectType SymbolicName="LADS:ComponentSetType" BaseType="OpcUa:BaseObjectType">
+		<Description>Represents a set of components.</Description>
+		<Children>
+			<!--<Variable SymbolicName="LADS:NodeVersion" DataType="OpcUa:UInt32" ValueRank="Scalar" TypeDefinition="OpcUa:PropertyType" ModellingRule="Mandatory" />-->
+		</Children>
+	</ObjectType>
+	<ObjectType SymbolicName="LADS:LADSDeviceType" BaseType="LADS:LADSComponentType">
+		<Description>A physical device.</Description>
+		<Children>
+			<Object SymbolicName="LADS:ComponentSet" TypeDefinition="LADS:ComponentSetType" ModellingRule="Mandatory" />
+			<Object SymbolicName="LADS:FunctionalUnitSet" TypeDefinition="LADS:FunctionalUnitSetType" ModellingRule="Mandatory" />
+		</Children>
+	</ObjectType>
+</ModelDesign>

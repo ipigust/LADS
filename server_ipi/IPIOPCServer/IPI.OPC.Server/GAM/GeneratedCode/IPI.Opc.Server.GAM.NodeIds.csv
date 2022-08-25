@@ -1,0 +1,6 @@
+GAMDeviceType,143,ObjectType
+GAMSystemStatusType,28,ObjectType
+GenericActuatorType,8,ObjectType
+GenericSensorType,1,ObjectType
+ReadbackTuneParametersType,34,ObjectType
+WatchdogType,15,ObjectType

@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ModelDesign
+	xmlns="http://opcfoundation.org/UA/ModelDesign.xsd"
+	xmlns:uax="http://opcfoundation.org/UA/2008/02/Types.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:OpcUa="http://opcfoundation.org/UA/"
+	xmlns:DI="http://opcfoundation.org/UA/DI/"
+	xmlns:LADS="http://spectaris.de/LADS/"
+	xmlns:GAM="http://in-process.com/UA/GAM/"
+	TargetNamespace="http://in-process.com/UA/GAM/"
+	TargetXmlNamespace="http://in-process.com/UA/GAM/"
+	TargetVersion="1.00.0"
+	TargetPublicationDate="2022-04-14T00:00:00Z"
+	>
+	<Namespaces>
+		<Namespace Name="OpcUa" Version="1.04.4" PublicationDate="2020-01-08T00:00:00Z" Prefix="Opc.Ua" InternalPrefix="Opc.Ua.Server" XmlNamespace="http://opcfoundation.org/UA/2008/02/Types.xsd" XmlPrefix="OpcUa">http://opcfoundation.org/UA/</Namespace>
+		<Namespace Name="OpcUaDi" Prefix="Opc.Ua.Di" XmlNamespace="http://opcfoundation.org/UA/DI/Types.xsd" XmlPrefix="DI" FilePath="..\DI\OpcUaDiModel">http://opcfoundation.org/UA/DI/</Namespace>
+		<Namespace Name="LADS" Prefix="Spectaris.LADS" XmlNamespace="http://spectaris.de/LADS/Types.xsd" XmlPrefix="LADS" FilePath="..\LADS\LADSModel">http://spectaris.de/LADS/</Namespace>
+		<Namespace Name="GAM" Prefix="IPI.OpcUaServer.GAM"  XmlNamespace="http://in-process.com/UA/GAM/Types.xsd" XmlPrefix="GAM">http://in-process.com/UA/GAM/</Namespace>
+	</Namespaces>
+
+	<Method SymbolicName="GAM:StartMethodType">
+		<Description>Causes the Program to transition from the Ready state to the Running state.</Description>
+		<InputArguments>
+			<Argument Name="TemplateID" DataType="OpcUa:String" />
+			<Argument Name="JobID" DataType="OpcUa:String" />
+			<Argument Name="SampleIDs" DataType="OpcUa:String" ValueRank="Array"/>
+			<Argument Name="Properties" DataType="OpcUa:KeyValuePair" />
+		</InputArguments>
+		<OutputArguments>
+			<Argument Name="ResultID" DataType="OpcUa:Structure" />
+		</OutputArguments>
+	</Method>
+
+	<ObjectType SymbolicName="GAM:GAMStateMachineType" BaseType="LADS:LADSBaseStateMachineType">
+		<Description>A program that produces simulated values.</Description>
+		<Children>
+			<Method SymbolicName="GAM:Start" ModellingRule="Mandatory">
+				<Description>Causes the Program to transition from the Ready state to the Running state.</Description>
+			</Method>
+			<Method SymbolicName="GAM:Stop" ModellingRule="Mandatory">
+				<Description>Causes the Program to transition from the Running to the Ready state.</Description>
+			</Method>
+		</Children>
+	</ObjectType>
+	<ObjectType SymbolicName="GAM:GAMMeasureStateMachineType" BaseType="GAM:GAMStateMachineType">
+		<Description>A program that produces simulated values.</Description>
+		<Children>
+			<Method SymbolicName="GAM:Start" TypeDefinition="GAM:StartMethodType" ModellingRule="Mandatory" />
+			<Method SymbolicName="GAM:Stop" ModellingRule="Mandatory">
+				<Description>Causes the Program to transition from the Running to the Ready state.</Description>
+			</Method>
+		</Children>
+	</ObjectType>
+	<ObjectType SymbolicName="GAM:DoubleAnalogSensorFunctionOperationalType" BaseType="LADS:BaseSensorFunctionOperationalType">
+		<Description>Object type that stores the raw sensor value provided by the sensing element, and the final sensor value, representing a real-world physical/chemical/biological property.</Description>
+		<Children>
+			<Variable SymbolicName="GAM:RawValue" DataType="OpcUa:Double" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogUnitRangeType" ModellingRule="Mandatory" />
+			<Variable SymbolicName="GAM:SensorValue" DataType="OpcUa:Double" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogUnitRangeType" ModellingRule="Mandatory" />
+		</Children>
+	</ObjectType>
+	<ObjectType SymbolicName="GAM:DoubleAnalogSensorFunctionType" BaseType="LADS:AnalogSensorFunctionType" >
+		<Description>Representing an analog measured value.</Description>
+		<Children>
+			<Object SymbolicName="GAM:Operational" TypeDefinition="GAM:DoubleAnalogSensorFunctionOperationalType" ModellingRule="Mandatory" />
+		</Children>
+	</ObjectType>
+	<ObjectType SymbolicName="GAM:TuneParametersFunctionSetType" BaseType="LADS:FunctionSetType">
+		<Description>TuneParameters</Description>
+		<Children>
+			<Object SymbolicName="GAM:IonReference" TypeDefinition="GAM:DoubleAnalogSensorFunctionType"  SupportsEvents="true" />
+			<Object SymbolicName="GAM:Cathode" TypeDefinition="GAM:DoubleAnalogSensorFunctionType"  SupportsEvents="true"/>
+			<Object SymbolicName="GAM:Extraction" TypeDefinition="GAM:DoubleAnalogSensorFunctionType"  SupportsEvents="true"/>
+			<Object SymbolicName="GAM:Focus" TypeDefinition="GAM:DoubleAnalogSensorFunctionType"  SupportsEvents="true"/>
+			<Object SymbolicName="GAM:FilamentCurrent" TypeDefinition="GAM:DoubleAnalogSensorFunctionType"  SupportsEvents="true"/>
+			<Object SymbolicName="GAM:EmissionCurrent" TypeDefinition="GAM:DoubleAnalogSensorFunctionType"  SupportsEvents="true"/>
+			<Object SymbolicName="GAM:Deflection" TypeDefinition="GAM:DoubleAnalogSensorFunctionType"  SupportsEvents="true"/>
+			<Object SymbolicName="GAM:Prefilter" TypeDefinition="GAM:DoubleAnalogSensorFunctionType"  SupportsEvents="true"/>
+			<Object SymbolicName="GAM:SEMVoltage" TypeDefinition="GAM:DoubleAnalogSensorFunctionType"  SupportsEvents="true"/>
+			<Object SymbolicName="GAM:UVRatio" TypeDefinition="GAM:DoubleAnalogSensorFunctionType"  SupportsEvents="true"/>
+			<Object SymbolicName="GAM:FieldAxis" TypeDefinition="GAM:DoubleAnalogSensorFunctionType"  SupportsEvents="true"/>
+			<Object SymbolicName="GAM:Resolution" TypeDefinition="GAM:DoubleAnalogSensorFunctionType"  SupportsEvents="true"/>
+			<Object SymbolicName="GAM:Slope" TypeDefinition="GAM:DoubleAnalogSensorFunctionType"  SupportsEvents="true"/>
+			<Object SymbolicName="GAM:UOffset" TypeDefinition="GAM:DoubleAnalogSensorFunctionType"  SupportsEvents="true"/>
+		</Children>
+	</ObjectType>
+	<ObjectType SymbolicName="GAM:WatchdogType" BaseType="OpcUa:BaseObjectType">
+		<Description>Watchdog</Description>
+		<Children>
+			<Variable SymbolicName="GAM:Trigger" DataType="OpcUa:Boolean" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogItemType" AccessLevel="Read" />
+			<Variable SymbolicName="GAM:Counter" DataType="OpcUa:Int16" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogItemType" AccessLevel="Read" />
+		</Children>
+		<References>
+			<Reference>
+				<ReferenceType>OpcUa:HasNotifier</ReferenceType>
+				<TargetId>GAM:WatchdogType_Trigger</TargetId>
+			</Reference>
+			<Reference>
+				<ReferenceType>OpcUa:HasNotifier</ReferenceType>
+				<TargetId>GAM:WatchdogType_Counter</TargetId>
+			</Reference>
+		</References>
+	</ObjectType>
+	<ObjectType SymbolicName="GAM:GAMSystemStatusType" BaseType="OpcUa:BaseObjectType">
+		<Description>GAM System Status</Description>
+		<Children>
+			<Property SymbolicName="GAM:AutomaticMode" DataType="OpcUa:Boolean" ValueRank="Scalar" AccessLevel="Read" />
+			<Property SymbolicName="GAM:GAMOK" DataType="OpcUa:Boolean" ValueRank="Scalar" AccessLevel="Read" />
+			<Property SymbolicName="GAM:GAMtemperatureOver35DegreeC" DataType="OpcUa:Boolean" ValueRank="Scalar" AccessLevel="Read" />
+			<Property SymbolicName="GAM:ManualMode" DataType="OpcUa:Boolean" ValueRank="Scalar" AccessLevel="Read" />
+			<Property SymbolicName="GAM:SystemStatusText" DataType="OpcUa:LocalizedText" ValueRank="Scalar" AccessLevel="Read" />
+		</Children>
+	</ObjectType>
+	<ObjectType SymbolicName="GAM:ReadbackTuneParametersType" BaseType="OpcUa:BaseObjectType">
+		<Description>TuneParameters</Description>
+		<Children>
+			<Variable SymbolicName="GAM:IonReference" DataType="OpcUa:Double" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogUnitType" AccessLevel="Read" />
+			<Variable SymbolicName="GAM:Cathode" DataType="OpcUa:Double" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogUnitType" AccessLevel="Read" />
+			<Variable SymbolicName="GAM:Extraction" DataType="OpcUa:Double" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogUnitType" AccessLevel="Read" />
+			<Variable SymbolicName="GAM:Focus" DataType="OpcUa:Double" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogUnitType" AccessLevel="Read" />
+			<Variable SymbolicName="GAM:FilamentCurrent" DataType="OpcUa:Double" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogUnitType" AccessLevel="Read" />
+			<Variable SymbolicName="GAM:EmissionCurrent" DataType="OpcUa:Double" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogUnitType" AccessLevel="Read" />
+			<Variable SymbolicName="GAM:Deflection" DataType="OpcUa:Double" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogUnitType" AccessLevel="Read" />
+			<Variable SymbolicName="GAM:Prefilter" DataType="OpcUa:Double" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogUnitType" AccessLevel="Read" />
+			<Variable SymbolicName="GAM:SEMVoltage" DataType="OpcUa:Double" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogUnitType" AccessLevel="Read" />
+			<Variable SymbolicName="GAM:UVRatio" DataType="OpcUa:Double" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogUnitType" AccessLevel="Read" />
+			<Variable SymbolicName="GAM:FieldAxis" DataType="OpcUa:Double" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogUnitType" AccessLevel="Read" />
+			<Variable SymbolicName="GAM:SelectedFilament" DataType="OpcUa:Int16" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogUnitType" AccessLevel="Read" />
+			<Variable SymbolicName="GAM:Resolution" DataType="OpcUa:Double" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogUnitType" AccessLevel="Read" />
+			<Variable SymbolicName="GAM:Slope" DataType="OpcUa:Double" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogUnitType" AccessLevel="Read" />
+			<Variable SymbolicName="GAM:UOffset" DataType="OpcUa:Int16" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogUnitType" AccessLevel="Read" />
+			<Variable SymbolicName="GAM:DetectorType" DataType="OpcUa:String" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogUnitType" AccessLevel="Read" />
+			<Variable SymbolicName="GAM:DetectorInputPin" DataType="OpcUa:Int16" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogUnitType" AccessLevel="Read" />
+			<Variable SymbolicName="GAM:FIREnabled" DataType="OpcUa:Boolean" ValueRank="Scalar" TypeDefinition="OpcUa:AnalogUnitType" AccessLevel="Read" />
+		</Children>
+	</ObjectType>
+	<ObjectType SymbolicName="GAM:MCDValueType" BaseType="OpcUa:BaseObjectType" SupportsEvents="true">
+		<Description>MCD Value</Description>
+		<Children>
+			<Variable SymbolicName="GAM:IsValid" DataType="OpcUa:Boolean" ValueRank="Scalar" AccessLevel="Read" />
+			<Variable SymbolicName="GAM:Component" DataType="OpcUa:String" ValueRank="Scalar" AccessLevel="Read" />
+			<Variable SymbolicName="GAM:Concentration" DataType="OpcUa:String" ValueRank="Scalar" AccessLevel="Read" />
+		</Children>
+	</ObjectType>
+	<ObjectType SymbolicName="GAM:GAMDeviceType" BaseType="LADS:LADSDeviceType" SupportsEvents="true">
+		<Description>A gas analysis mass spectrometer.</Description>
+		<Children>
+			<Object SymbolicName="GAM:SystemStatus" TypeDefinition="GAM:GAMSystemStatusType" SupportsEvents="true"/>
+		</Children>
+	</ObjectType>
+</ModelDesign>

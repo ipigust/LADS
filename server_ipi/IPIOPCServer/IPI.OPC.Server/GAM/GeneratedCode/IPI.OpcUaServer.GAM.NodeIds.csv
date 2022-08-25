@@ -1,0 +1,10 @@
+DoubleAnalogSensorFunctionOperationalType,5110,ObjectType
+DoubleAnalogSensorFunctionType,5126,ObjectType
+GAMDeviceType,143,ObjectType
+GAMMeasureStateMachineType,5412,ObjectType
+GAMStateMachineType,562,ObjectType
+GAMSystemStatusType,28,ObjectType
+MCDValueType,900,ObjectType
+ReadbackTuneParametersType,34,ObjectType
+TuneParametersFunctionSetType,1029,ObjectType
+WatchdogType,15,ObjectType
